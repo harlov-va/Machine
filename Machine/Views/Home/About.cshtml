@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Machine.Models.Drinks>
+
+@{
+    ViewBag.Title = "Products";
+}
+
+@foreach (var p in Model)
+{
+<div class="item">
+    <h3>@p.Name</h3>
+    @p.Description
+    <h4>@p.Price.ToString("c")</h4>
+</div>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@{
+    ViewBag.Title = "About";
+}
+<h2>@ViewBag.Title.</h2>
+<h3>@ViewBag.Message</h3>
+
+<p>Use this area to provide additional information.</p>
