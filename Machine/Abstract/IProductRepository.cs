@@ -5,10 +5,10 @@ namespace Machine.Abstract
 {
     public interface IProductRepository
     {
-        IQueryable<Drinks> Drinks { get; }
-        IQueryable<Coins> Coins { get; }
-        void SaveProduct(Drinks drink);
-        void SaveCoin(Coins coin);
-        Drinks DeleteDrink(int productID);
+        IQueryable<Drink> Drinks { get; }
+        IQueryable<Coin> Coins { get; }
+        void SaveProduct(Drink drink);
+        void SaveCoin(Coin coin);
+        Drink DeleteDrink(int productID);
     }
 }

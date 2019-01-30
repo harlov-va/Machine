@@ -8,15 +8,15 @@ namespace Machine.Concrete
     public class EFProductRepository : IProductRepository
     {
         private EFDbContext context = new EFDbContext();
-        public IQueryable<Drinks> Drinks
+        public IQueryable<Drink> Drinks
         {
             get { return context.Drinks; }
         }
-        public IQueryable<Coins> Coins
+        public IQueryable<Coin> Coins
         {
             get { return context.Coins; }
         }
-        public void SaveProduct(Drinks drink)
+        public void SaveProduct(Drink drink)
         {
             if (drink.ProductID == 0)
             {
@@ -24,7 +24,7 @@ namespace Machine.Concrete
             }
             else
             {
-                Drinks dbEntry = context.Drinks.Find(drink.ProductID);
+                Drink dbEntry = context.Drinks.Find(drink.ProductID);
                 if (dbEntry != null)
                 {
                     dbEntry.Name = drink.Name;
@@ -32,11 +32,13 @@ namespace Machine.Concrete
                     dbEntry.Price = drink.Price;
                     dbEntry.iCount = drink.iCount;
                     dbEntry.BThereIsDrink = drink.BThereIsDrink;
+                    dbEntry.ImageData = drink.ImageData;
+                    dbEntry.ImageMimeType = drink.ImageMimeType;
                 }
             }
             context.SaveChanges();
         }
-        public void SaveCoin(Coins coin)
+        public void SaveCoin(Coin coin)
         {
             if (coin.CoinID == 0)
             {
@@ -44,7 +46,7 @@ namespace Machine.Concrete
             }
             else
             {
-                Coins dbEntry = context.Coins.Find(coin.CoinID);
+                Coin dbEntry = context.Coins.Find(coin.CoinID);
                 if (dbEntry != null)
                 {
                     dbEntry.SNameCoin = coin.SNameCoin;
@@ -56,9 +58,9 @@ namespace Machine.Concrete
             }
             context.SaveChanges();
         }
-        public Drinks DeleteDrink(int productID)
+        public Drink DeleteDrink(int productID)
         {
-            Drinks dbEntry = context.Drinks.Find(productID);
+            Drink dbEntry = context.Drinks.Find(productID);
             if (dbEntry != null)
             {
                 context.Drinks.Remove(dbEntry);

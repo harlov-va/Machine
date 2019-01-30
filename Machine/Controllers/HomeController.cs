@@ -5,18 +5,18 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Machine.Concrete;
-
+using Machine.Abstract;
 
 namespace Machine.Controllers
 {
     public class HomeController : Controller
     {
-        
-        private EFProductRepository repository = new EFProductRepository();
-        //public HomeController(EFProductRepository productRepository)
-        //{
-        //    this.repository = productRepository;
-        //}
+
+        private IProductRepository repository;
+        public HomeController(IProductRepository productRepository)
+        {
+            this.repository = productRepository;
+        }
         //private void PlusCoin(string ValueCoin)
         //{
         //    HttpContext.Application.Lock();
@@ -28,7 +28,7 @@ namespace Machine.Controllers
         //    count++;
         //    HttpContext.Application[ValueCoin] = count;
 
-    
+
         //    HttpContext.Application.UnLock();
         //}
         //private void DefaultGlobalVariable()
@@ -44,12 +44,20 @@ namespace Machine.Controllers
         //}
         public void DefaultViewBag()
         {
-            ViewBag.BThereisCoffee = true;
-            ViewBag.BThereisTea = true;
-            ViewBag.BThereisWater = true;
-            ViewBag.BThereisAir = true;
-            ViewBag.BThereisBeetlejuice = true;
-            ViewBag.BThereisYupi = true;
+            ViewBag.BDontOne = false;
+            ViewBag.BDontTwo = false;
+            ViewBag.BDontFive = false;
+            ViewBag.BDontTen = false;
+            foreach (var c in repository.Coins)
+            {
+                if ((c.SNameCoin == "One") & (c.BDontCoin)) ViewBag.BDontOne = true;
+
+                if ((c.SNameCoin == "Two") & (c.BDontCoin)) ViewBag.BDontTwo = true;
+
+                if ((c.SNameCoin == "Five") & (c.BDontCoin)) ViewBag.BDontFive = true;
+
+                if ((c.SNameCoin == "Ten") & (c.BDontCoin)) ViewBag.BDontTen = true;
+            }
         }
         private Dictionary<int, int> CalculateChange(int Money)
         {
@@ -64,78 +72,73 @@ namespace Machine.Controllers
             }
             return Dic;
         }
-        private string StringToCoin(string StringNameButton)
+        //private string StringToCoin(string StringNameButton)
+        //{
+        //    string text = "";
+        //    switch (StringNameButton)
+        //    {
+        //        case "1 руб.":text="One";
+        //            break;
+        //        case "2 руб.":
+        //            text = "Two";
+        //            break;
+        //        case "5 руб.":
+        //            text = "Five";
+        //            break;
+        //        case "10 руб.":
+        //            text = "Ten";
+        //            break;
+        //    }
+        //    return (text);
+        //}
+        private void SaveCoinInBase(string NameNumberCoin)
         {
-            string text = "";
-            switch (StringNameButton)
-            {
-                case "1 руб.":text="One";
-                    break;
-                case "2 руб.":
-                    text = "Two";
-                    break;
-                case "5 руб.":
-                    text = "Five";
-                    break;
-                case "10 руб.":
-                    text = "Ten";
-                    break;
-            }
-            return (text);
+            Coin coin = repository.Coins.FirstOrDefault(d => d.SNameNumberCoin == NameNumberCoin);
+            coin.iCountCoin ++;
+            repository.SaveCoin(coin);
         }
         private void SaveCoinInBase(string NameCoin,int ValueCountCoin)
         {
-            Coins coin = repository.Coins.FirstOrDefault(d => d.SNameCoin == NameCoin);
+            Coin coin = repository.Coins.FirstOrDefault(d => d.SNameCoin == NameCoin);
             coin.iCountCoin += ValueCountCoin;
             repository.SaveCoin(coin);
         }
         [HttpGet]
         public ActionResult Index()
         {
-            ViewBag.SumMoney = 0;
+            ViewBag.SumMoney = int.Parse("0");
             ViewBag.RestOfMoney = 0;
             DefaultViewBag();
             if ( Request.QueryString["id"] == "secret")
                 return Redirect(Url.Action("Index", "Admin")); 
-            else return View(repository.Coins);
+            else return View(repository.Drinks);
         }
         [HttpPost]
-        public ActionResult Index(string SumMoney, string clickonbutton,string clickbuttoncoin)
+        public ActionResult Index(string SumMoney, string clickonbutton,string clickbuttoncoin,string buttonrestofmoney)
         {
-            //ViewBag.Title = HttpContext.Application["1 руб."];
+            ViewBag.Title = buttonrestofmoney;
             //(HttpContext.Application["LicenseFile"] as string);
             int iSumInController = 0;
             int.TryParse(SumMoney, out iSumInController);
             //Sum += k;
-            ViewBag.SumMoney = SumMoney;
             ViewBag.RestOfMoney = 0;
+            ViewBag.SumMoney = int.Parse(SumMoney);
             DefaultViewBag();
-            foreach (var d in repository.Drinks)
-            {
-                if ((d.Name == "Coffee") & (d.BThereIsDrink) & (iSumInController >= d.Price)) ViewBag.BThereisCoffee = false;
-
-                if ((d.Name == "Tea") & (d.BThereIsDrink) & (iSumInController >= d.Price)) ViewBag.BThereisTea = false;
-
-                if ((d.Name == "Water") & (d.BThereIsDrink) & (iSumInController >= d.Price)) ViewBag.BThereisWater = false;
-
-                if ((d.Name == "Air") & (d.BThereIsDrink) & (iSumInController >= d.Price)) ViewBag.BThereisAir = false;
-
-                if ((d.Name == "Beetlejuice") & (d.BThereIsDrink) & (iSumInController >= d.Price)) ViewBag.BThereisBeetlejuice = false;
-
-                if ((d.Name == "Yupi") & (d.BThereIsDrink) & (iSumInController >= d.Price)) ViewBag.BThereisYupi = false;
-
-            }
-            if (!string.IsNullOrEmpty(clickbuttoncoin)) SaveCoinInBase(StringToCoin(clickbuttoncoin),1);
- 
+            if (!string.IsNullOrEmpty(clickbuttoncoin)) SaveCoinInBase(clickbuttoncoin.Split(' ')[0]);
             if (!string.IsNullOrEmpty(clickonbutton))
             {
-                Drinks Drink = repository.Drinks.FirstOrDefault(d => d.Name == clickonbutton);
+                Drink Drink = repository.Drinks.FirstOrDefault(d => d.Name == clickonbutton);
                 Drink.iCount--;
                 repository.SaveProduct(Drink);
                 clickonbutton = "";
                 clickbuttoncoin = "";
                 ViewBag.RestOfMoney = iSumInController - (int)Drink.Price;
-                foreach (KeyValuePair<int, int> item in CalculateChange(iSumInController-(int)Drink.Price))
+                
+                ViewBag.SumMoney = ViewBag.RestOfMoney;
+            }
+            if (!string.IsNullOrEmpty(buttonrestofmoney))
+            {
+                foreach (KeyValuePair<int, int> item in CalculateChange((int.Parse(buttonrestofmoney.Split(' ')[0]))))
                 {
                     switch (item.Key)
                     {
@@ -154,16 +157,15 @@ namespace Machine.Controllers
                     }
                 }
                 ViewBag.SumMoney = 0;
-                DefaultViewBag();
-                //return Redirect(Url.Action("Index", "Home"));
             }
-            return View(repository.Coins);
+            
+            return View(repository.Drinks);
         }
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
 
-            return View(repository.Drinks);
+            return View(repository.Drinks.FirstOrDefault(d => d.ProductID == 1));
         }
 
         public ActionResult Contact()
@@ -171,6 +173,18 @@ namespace Machine.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+        public FileContentResult GetImage(int productId)
+        {
+            Drink prod = repository.Drinks.FirstOrDefault(p => p.ProductID == productId);
+            if (prod != null)
+            {
+                return File(prod.ImageData, prod.ImageMimeType);
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

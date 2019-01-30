@@ -1,16 +1,73 @@
-﻿@model IEnumerable<Machine.Models.Drinks>
+﻿@model Machine.Models.Drink
 
 @{
     ViewBag.Title = "Products";
 }
 
-@foreach (var p in Model)
+@*@helper CreateList(string content)
 {
-<div class="item">
-    <h3>@p.Name</h3>
-    @p.Description
-    <h4>@p.Price.ToString("c")</h4>
-</div>
+    @Html.Raw(content);
+}
+
+<body>
+    <style type="text/css">
+        .center {
+            display: block;
+            margin: auto;
+        }
+
+        .button {
+            width: 100px;
+            height: 50px;
+            text-align: center;
+        }
+
+        .hide {
+            display: none;
+        }
+    </style>
+
+
+    <table>
+        <tr>
+            @{
+                int i = 0;
+                foreach (var p in Model)
+                {
+                    i++;
+                    if ((20 >= p.Price) & (p.BThereIsDrink))
+                    {
+                        <td>
+                            <div class="item">
+                                <button name="clickonbutton" type="submit" value=@p.Name><img class="center" src="~/Images/coffee.jpg" style="width: 128px; height: 96px;vertical-align: bottom">@p.Name, @p.Price руб.</button>
+                            </div>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <div class="item">
+                                <button name="clickonbutton" type="submit" value=@p.Name disabled><img class="center" src="~/Images/coffee.jpg" style="width: 128px; height: 96px;vertical-align: bottom">@p.Name, @p.Price руб.</button>
+                            </div>
+                        </td>
+                    }
+                    if (i % 3 == 0)
+                    {
+                        @CreateList("</tr> <tr>");
+                    }
+                }
+            }
+    </table>
+</body>*@
+
+@if (Model.ImageData != null) 
+{
+    <div style="float: left; margin-right: 20px">
+        <img width="75" height="75" src="@Url.Action("GetImage", "Product", new
+                                    {
+                                        Model.ProductID
+                                    })" />
+    </div>
 }
 
 
@@ -28,13 +85,10 @@
 
 
 
+    @{
+        ViewBag.Title = "About";
+    }
+    <h2>@ViewBag.Title.</h2>
+    <h3>@ViewBag.Message</h3>
 
-
-
-@{
-    ViewBag.Title = "About";
-}
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
-
-<p>Use this area to provide additional information.</p>
+    <p>Use this area to provide additional information.</p>

@@ -5,7 +5,7 @@ namespace Machine.Concrete
 {
     public class EFDbContext : DbContext
     {
-        public DbSet<Drinks> Drinks { get; set; }
-        public DbSet<Coins> Coins { get; set; }
+        public DbSet<Drink> Drinks { get; set; }
+        public DbSet<Coin> Coins { get; set; }
     }
 }

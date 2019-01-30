@@ -1,4 +1,4 @@
-﻿@model Machine.Models.Drinks
+﻿@model Machine.Models.Drink
 
 @{
     ViewBag.Title = "Admin: Edit " + @Model.Name;
@@ -17,7 +17,7 @@ FormMethod.Post, new { enctype = "multipart/form-data" }))
         }
         else
         {
-            <img width="150" height="150" src="@Url.Action("GetImage", "Product", new {
+            <img width="150" height="150" src="@Url.Action("GetImage", "Home", new {
 Model.ProductID })" />
         }
         <div>
@@ -26,5 +26,5 @@ Model.ProductID })" />
         </div>
     </div>
     <input type="submit" value="Save" />
-    @Html.ActionLink("Cancel and return to List", "Index")
+    @Html.ActionLink("Cancel and return to List", "Drink")
 }

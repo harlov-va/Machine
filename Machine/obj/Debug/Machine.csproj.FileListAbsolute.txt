@@ -80,3 +80,5 @@ D:\Users\harlov\Desktop\Работа\YandexDisk\Projects\Тестовые зад
 D:\Users\harlov\Desktop\Работа\YandexDisk\Projects\Тестовые задания\Intravision.ru\Machine\Machine\bin\EntityFramework.xml
 D:\Users\harlov\Desktop\Работа\YandexDisk\Projects\Тестовые задания\Intravision.ru\Machine\Machine\bin\EntityFramework.SqlServer.xml
 D:\Users\harlov\Desktop\Работа\YandexDisk\Projects\Тестовые задания\Intravision.ru\Machine\Machine\bin\Machine.dll.config
+D:\YandexDisk\Projects\Тестовые задания\Intravision.ru\Machine\Machine\bin\Ninject.dll
+D:\YandexDisk\Projects\Тестовые задания\Intravision.ru\Machine\Machine\bin\Ninject.xml
